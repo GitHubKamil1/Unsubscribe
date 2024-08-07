@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test Landingpage</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://webtracking-v01.bpmonline.com/JS/track-cookies.js"></script>
+<script src="https://webtracking-v01.bpmonline.com/JS/create-object.js"></script>
+<script src="https://webtracking-v01.creatio.com/JS/track-cookies.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body>
+<form class="form-example" name="landingForm" id="my-form" onSubmit="createLead(); return false">
+  <div class="form-example">
+    <label for="firstname">firstname: </label>
+    <input type="text" name="firstname" id="firstname" />
+  </div>
+  <div class="form-example">
+    <label for="Address">adress: </label>
+    <input type="text" name="adress" id="adress" />
+  </div>
+  <div class="form-example">
+    <label for="lastname">lastname: </label>
+    <input type="text" name="lastname" id="lastname" />
+  </div>
+    <div class="form-example">
+    <label for="zip">zip: </label>
+    <input type="text" name="zip" id="zip" />
+  </div>
+  <div class="form-example">
+    <label for="city">city: </label>
+    <input type="text" name="city" id="city" />
+  </div>
+    <div class="form-example">
+    <label for="phone">phone: </label>
+    <input type="tel" name="phone" id="phone" />
+  </div>
+  <div class="form-example">
+    <label for="email">email: </label>
+    <input type="email" name="email" id="email" required />
+  </div>
+<input type="hidden" id="fieldId" />
+<input type="hidden" id="composedName" />
+<input type="hidden" id="booleanoption" />
+ <div class="form-example">
+    <select name="options" id="options">
+      <option value="1" name="option1">serwis kiszonarski</option>
+      <option value="2" name="option2">Żywienie młodzieży</option>
+      <option value="3" name="option3">Żywienie krów mlecznych</option>
+      <option value="4" name="option4">Żywienie trzody</option>
+      <option value="5" name="option4">Żywienie opasów</option>
+  </select>
+</div>
+  
+  <div class="form-example">
+    <input type="submit" value="Subscribe!" />
+  </div>
+ 
+</form>
+<script>
+
+/**
+* Replace the "css-selector" placeholders in the code below with the element selectors on your landing page.
+* You can use #id or any other CSS selector that will define the input field explicitly.
+* Example: "Email": "#MyEmailField".
+* If you don't have a field from the list below placed on your landing, leave the placeholder or remove the line.
+*/
+  
+var config = {
+    fields: {
+        "Contact": "#composedName", // Name of a visitor, submitting the page
+        "Account": "#composedName",
+        "Email": "#email", // Visitor's email
+        "MobilePhone": "#phone",
+        "Address": "#adress",
+        "Zip": "#zip",
+        "City": "#city",
+        "Commentary": "#fieldId",
+        "UsrField": "#booleanoption"
+    },
+    contactFields: {},
+    customFields: {},
+    //landingId: "5147a45a-109c-479c-adb1-6280500a447a",
+    //serviceUrl: "https://pre-josera.creatio.com/0/ServiceModel/GeneratedObjectWebFormService.svc/SaveWebFormObjectData",
+    landingId: "673b8c34-5788-4f30-90f2-026049e2b69d",
+    serviceUrl: "https://149924-crm-bundle.creatio.com/0/ServiceModel/GeneratedObjectWebFormService.svc/SaveWebFormObjectData",
+    redirectUrl: ""
+};
+/**
+* The function below creates a object from the submitted data.
+* Bind this function call to the "onSubmit" event of the form or any other elements events.
+* Example: <form class="mainForm" name="landingForm" onSubmit="createObject(); return false">
+*/
+
+function renameField(oldKey, newKey) {
+    if (config.fields.hasOwnProperty(oldKey)) {
+        config.fields[newKey] = config.fields[oldKey];
+        delete config.fields[oldKey];
+    }
+}  
+function createLead() {
+    var skillsSelect = document.getElementById("options");
+    var selectedValue = skillsSelect.options[skillsSelect.selectedIndex].value;
+    var selectedText = skillsSelect.options[skillsSelect.selectedIndex].text;
+    $("#fieldId").val(selectedText);
+  
+    var inputfirstname = document.getElementById("firstname").value
+    var inputlastname = document.getElementById("lastname").value
+    var outputname = inputfirstname + " " + inputlastname;
+    $("#composedName").val(outputname);
+
+    // Füge den ausgewählten Wert als neuen Schlüssel-Wert-Paar in die customFields von config ein
+
+    switch(selectedValue){
+      case "1":
+        $("#booleanoption").val("true");
+        renameField("UsrField", "OViSilageadditive")
+        break;
+      case "2":
+        $("#booleanoption").val("true");
+        renameField("UsrField", "OViMilkreplacer")
+        break;
+      case "3":
+        $("#booleanoption").val("true");
+        renameField("UsrField", "OViRuminants")
+        break;
+      case "4":
+        $("#booleanoption").val("true");
+        renameField("UsrField", "OViPig")
+        break;
+      case "5":
+        $("#booleanoption").val("true");
+        renameField("UsrField", "OViMineralfeed")
+        break;
+      // Du kannst weitere Fälle für andere Werte hinzufügen
+      default:
+        $("#booleanoption").val("false");
+    }
+    landing.createLeadFromLanding(config);
+}
+/**
+* The function below inits landing page using URL parameters.
+*/
+function initLanding() {
+    landing.initLanding(config);
+}
+jQuery(document).ready(initLanding);
+</script>
+
+
+</body>
+</html>
